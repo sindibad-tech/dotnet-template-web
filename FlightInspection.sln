@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CD8FF08-EB7D-492A-B50F-7CF46E4D68EC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Dockerfile = Dockerfile
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\WebApi\WebApi.csproj", "{E07DC44D-F572-4609-810E-85FFFC5F7A5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E07DC44D-F572-4609-810E-85FFFC5F7A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E07DC44D-F572-4609-810E-85FFFC5F7A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E07DC44D-F572-4609-810E-85FFFC5F7A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E07DC44D-F572-4609-810E-85FFFC5F7A5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5988042B-78F1-49BC-829B-B93B01021E2F}
+	EndGlobalSection
+EndGlobal
