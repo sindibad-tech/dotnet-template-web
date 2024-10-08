@@ -110,7 +110,7 @@ the custom traces are exported by default
 
 the app exposes 2 health check endpoints on 2 base reoutes
 
-- `/health` Use this path for the __healthiness__ check
+- `/live` Use this path for the __liveliness__ check
 
 This path is configured to report the application health and returns succesful when all critically important comonents are working
 It does not fail when the app is in a `Degraded` state to allow the app to self-heal

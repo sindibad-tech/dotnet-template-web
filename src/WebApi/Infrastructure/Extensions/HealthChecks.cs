@@ -14,7 +14,7 @@ public static class HealthChecks
     #region Constants
 
     [StringSyntax("Route")]
-    private const string HEALTH_CHECK_ROUTE = "/health";
+    private const string HEALTH_CHECK_ROUTE = "/live";
 
     [StringSyntax("Route")]
     private const string READINESS_CHECK_ROUTE = "/ready";
