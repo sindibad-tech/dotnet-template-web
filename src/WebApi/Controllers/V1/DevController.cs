@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.FeatureFlags;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Response;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.FeatureFlags;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Response;
+using Sindibad.SAD.WebTemplate.WebApi.ViewModels.Dev;
 
-namespace Sindibad.SAD.FlightInspection.WebApi.Controllers.V1;
+namespace Sindibad.SAD.WebTemplate.WebApi.Controllers.V1;
 
 public class DevController(ILogger<ApiControllerBase> logger, IFeatureManager featureManager) : ApiControllerBase(logger, featureManager)
 {
@@ -30,11 +31,4 @@ public class DevController(ILogger<ApiControllerBase> logger, IFeatureManager fe
                 _ => DateTimeOffset.MinValue,
             },
         }));
-}
-
-public enum DatetimeType
-{
-    Undefined = 0,
-    Local = 1,
-    UTC = 2,
 }

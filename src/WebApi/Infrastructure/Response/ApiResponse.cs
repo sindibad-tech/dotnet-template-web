@@ -1,4 +1,4 @@
-﻿namespace Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Response;
+﻿namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Response;
 public class ApiResponse
 {
     public bool Success { get; init; }

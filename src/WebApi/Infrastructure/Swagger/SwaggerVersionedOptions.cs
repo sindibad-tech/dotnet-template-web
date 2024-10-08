@@ -2,10 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Swagger;
+namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Swagger;
 
 public class SwaggerVersionedOptions(IApiVersionDescriptionProvider apiVersionDescriptionProvider) : IConfigureNamedOptions<SwaggerGenOptions>
 {
@@ -18,12 +17,12 @@ public class SwaggerVersionedOptions(IApiVersionDescriptionProvider apiVersionDe
         {
             options.SwaggerDoc(version.GroupName, new OpenApiInfo()
             {
-                Title = "Sindibad Search & Discovery Flight Inspection Service",
-                License = new OpenApiLicense() { Name = "MIT" },
+                Title = SwaggerContent.Title,
+                License = new OpenApiLicense() { Name = SwaggerContent.LicenseName },
                 Description = version.IsDeprecated switch
                 {
-                    true => "Warning! This Api version has been deprecated!",
-                    false => "Sindibad Flight Inspection Api",
+                    true => SwaggerContent.DeprecationWarning,
+                    false => SwaggerContent.Description,
                 },
                 Version = version.ApiVersion.ToString(),
             });

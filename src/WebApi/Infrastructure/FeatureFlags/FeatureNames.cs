@@ -1,4 +1,4 @@
-﻿namespace Sindibad.SAD.FlightInspection.WebApi.Infrastructure.FeatureFlags;
+﻿namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.FeatureFlags;
 
 public class FeatureNames
 {

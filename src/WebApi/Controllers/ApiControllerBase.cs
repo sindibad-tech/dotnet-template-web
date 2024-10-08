@@ -1,11 +1,11 @@
-﻿using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Constants;
+﻿using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Constants;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Mime;
 using Microsoft.FeatureManagement;
 
-namespace Sindibad.SAD.FlightInspection.WebApi.Controllers;
+namespace Sindibad.SAD.WebTemplate.WebApi.Controllers;
 [ApiController]
 [Route("api/v{ver:apiVersion}/[controller]")]
 [Consumes(MediaTypeNames.Application.Json, MediaTypeNames.Text.Plain)]

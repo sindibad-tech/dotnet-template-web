@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Response;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Response;
 
-namespace Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Middleware;
+namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware;
 public class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger, IHostEnvironment env) : IMiddleware
 {
+    #region Dependencies
+
     private readonly IHostEnvironment _env = env;
     private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
+
+    #endregion
+
+    #region Methods
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -22,12 +28,18 @@ public class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> lo
             if (!context.Response.HasStarted)
             {
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsJsonAsync(CreateDefaultFailedResponse(ex));
+                await context.Response.WriteAsJsonAsync(CreateFailedResponse(ex));
             }
         }
     }
 
-    private ApiResponse CreateDefaultFailedResponse(Exception? ex)
+    #endregion
+
+    #region Util
+
+    private const string DEFAULT_ERROR = "Unhandled Server Error";
+
+    private ApiResponse CreateFailedResponse(Exception? ex)
     {
         List<string> errors = [];
         if (_env.IsDevelopment())
@@ -41,7 +53,7 @@ public class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> lo
         }
         else
         {
-            errors[0] = "Unhandled Server Error";
+            errors[0] = DEFAULT_ERROR;
         }
 
         return new ApiResponse()
@@ -50,4 +62,6 @@ public class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> lo
             Success = false,
         };
     }
+
+    #endregion
 }

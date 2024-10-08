@@ -17,11 +17,11 @@ using Serilog;
 using Serilog.Exceptions;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Builder;
-using Sindibad.SAD.FlightInspection.WebApi.ConfigModels;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Extensions;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Middleware;
-using Microsoft.FeatureManagement;
-namespace Sindibad.SAD.FlightInspection.WebApi;
+using Sindibad.SAD.WebTemplate.WebApi.ConfigModels;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Extensions;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware;
+
+namespace Sindibad.SAD.WebTemplate.WebApi;
 public class Program
 {
     #region Main
@@ -180,7 +180,7 @@ public class Program
 
         services.AddControllers();
 
-        services.AddFeatureManagement();
+        services.ConfigureFeatureFlags(configuration, env);
 
         services.ConfigureApiVersioning(configuration, env);
 
@@ -196,23 +196,7 @@ public class Program
 
     private static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
     {
-        /// Removed Supabase from EF Core
-        //services.AddDbContext<SupabaseDbContext>((sp, options) =>
-        //{
-        //    var connString = configuration.GetConnectionString("Supabase");
-        //    var timeout = configuration
-        //        .GetSection("ConnectionStrings")
-        //        .GetSection("QueryTimeout")
-        //        .Get<TimeSpan>();
-        //    options
-        //    .UseNpgsql(connString, opt => opt.CommandTimeout(timeout switch
-        //    {
-        //        { TotalSeconds: > 0 and var time } => (int)time,
-        //        _ => 60
-        //    }))
-        //    .EnableSensitiveDataLogging();
-        //});
-        ///
+        // Add DBCONTEXTEs here
     }
 
     private static void ConfigureHttpClient(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)

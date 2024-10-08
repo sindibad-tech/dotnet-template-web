@@ -3,22 +3,24 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Swagger;
+using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Swagger;
 using System.IO;
 using System.Reflection;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
-namespace Sindibad.SAD.FlightInspection.WebApi.Infrastructure.Extensions;
-
+namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Extensions;
 public static class Swagger
 {
+
+    #region Configuration
+
     public static void ConfigureSwagger(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
     {
         services.AddSwaggerGen(swagger =>
         {
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            swagger.IncludeXmlComments(xmlPath);
+            var path = GetDocumentationFilePath();
+
+            swagger.IncludeXmlComments(path);
             swagger.AddEnumsWithValuesFixFilters(options =>
             {
                 options.IncludeDescriptions = true;
@@ -45,4 +47,16 @@ public static class Swagger
         });
     }
 
+    #endregion
+
+    #region Util
+
+    private static string GetDocumentationFilePath()
+    {
+        var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+        return Path.Combine(AppContext.BaseDirectory, xmlFileName);
+    }
+
+    #endregion
 }

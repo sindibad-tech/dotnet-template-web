@@ -4,8 +4,8 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<StartupObject>Sindibad.SAD.FlightInspection.WebApi.Program</StartupObject>
-		<AssemblyName>Sindibad.SAD.FlightInspection.$(MSBuildProjectName)</AssemblyName>
+		<StartupObject>Sindibad.SAD.WebTemplate.WebApi.Program</StartupObject>
+		<AssemblyName>Sindibad.SAD.WebTemplate.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>$(AssemblyName)</RootNamespace>
 		<Version>1.0.0</Version>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -57,7 +57,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\Flight\" />
+	  <Compile Update="Infrastructure\Swagger\SwaggerContent.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>SwaggerContent.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Infrastructure\Swagger\SwaggerContent.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>SwaggerContent.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 </Project>

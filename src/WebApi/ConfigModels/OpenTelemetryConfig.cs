@@ -1,4 +1,4 @@
-﻿namespace Sindibad.SAD.FlightInspection.WebApi.ConfigModels;
+﻿namespace Sindibad.SAD.WebTemplate.WebApi.ConfigModels;
 internal class OpenTelemetryConfig
 {
     public required bool Enabled { get; set; }

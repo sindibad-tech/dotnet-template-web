@@ -21,4 +21,4 @@ RUN dotnet publish "./WebApi.csproj" -c $BUILD_CONFIGURATION -p:UseAppHost=false
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Sindibad.SAD.FlightInspection.WebApi.dll"]
+ENTRYPOINT ["dotnet", "Sindibad.SAD.WebTemplate.WebApi.dll"]
