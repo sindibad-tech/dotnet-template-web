@@ -42,7 +42,7 @@ public class ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> lo
     private ApiResponse CreateFailedResponse(Exception? ex)
     {
         List<string> errors = [];
-        if (_env.IsDevelopment())
+        if (_env.IsDevelopment() || _env.IsStaging())
         {
             do
             {

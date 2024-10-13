@@ -78,7 +78,7 @@ public static class HealthChecks
 
 
     private static Func<HttpContext, HealthReport, Task> GetResponseWriterForEnv(IHostEnvironment env) =>
-        env.IsDevelopment() ? WriteDetailedHealthCheckResponse : WriteHealthCheckResponse;
+        env.IsDevelopment() | env.IsStaging() ? WriteDetailedHealthCheckResponse : WriteHealthCheckResponse;
 
     private static async Task WriteHealthCheckResponse(HttpContext http, HealthReport report)
     {

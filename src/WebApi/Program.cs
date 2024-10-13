@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Sindibad.SAD.WebTemplate.WebApi.ConfigModels;
 using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Extensions;
 using Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware;
+using Microsoft.AspNetCore.Http;
 
 namespace Sindibad.SAD.WebTemplate.WebApi;
 public class Program
@@ -139,7 +140,10 @@ public class Program
                 .Get<OpenTelemetryConfig>() ?? throw new ApplicationException("Please provide logging open telemetry configuration");
 
             otel
-            .SetResourceBuilder(ApplicationResource);
+            .SetResourceBuilder(ApplicationResource.AddAttributes(new Dictionary<string, object>()
+            {
+                ["deployment.environment"] = env.EnvironmentName,
+            }));
 
             otel.IncludeScopes = true;
             otel.ParseStateValues = true;
@@ -151,16 +155,17 @@ public class Program
                 {
                     otlp.Endpoint = new Uri(config.Endpoint!);
                     otlp.Headers = config.JoinedHeaders;
-                    otlp.Protocol = OtlpExportProtocol.Grpc;
+                    otlp.TimeoutMilliseconds = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
                 });
             }
         });
     }
 
-    private static void ConfigureSerilog(IConfiguration configuration, IHostEnvironment env, IServiceProvider sp, LoggerConfiguration serilog)
+    private static void ConfigureSerilog(IConfiguration configuration, IHostEnvironment env, LoggerConfiguration serilog)
     {
-        serilog.WriteTo.Console(theme: AnsiConsoleTheme.Code);
         serilog
+            .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+            .ReadFrom.Configuration(configuration.GetSection("Logging"))
             .Enrich.FromLogContext()
             .Enrich.WithExceptionDetails()
             .Enrich.WithMachineName()
@@ -174,7 +179,7 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
     {
-        services.AddSerilog((sp, logging) => ConfigureSerilog(configuration, env, sp, logging), writeToProviders: true);
+        services.AddSerilog((_, logging) => ConfigureSerilog(configuration, env, logging), writeToProviders: true);
 
         services.ConfigureHealthChecks(configuration, env);
 
@@ -184,11 +189,12 @@ public class Program
 
         services.ConfigureApiVersioning(configuration, env);
 
-        if (env.IsDevelopment())
+        if (env.IsDevelopment() || env.IsStaging())
             services.ConfigureSwagger(configuration, env);
 
         services.AddSingleton<ExceptionHandlingMiddleware>();
 
+        ConfigureApplicationServices(services, configuration, env);
         ConfigureOpenTelemetry(services, configuration, env);
         ConfigureHttpClient(services, configuration, env);
         ConfigureDbContext(services, configuration, env);
@@ -199,9 +205,13 @@ public class Program
         // Add DBCONTEXTEs here
     }
 
+    private static void ConfigureApplicationServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
+    {
+        // add application services here
+    }
+
     private static void ConfigureHttpClient(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
     {
-        // we can add http logging here but we should use tracing instead for recording http requests
         services
             .AddHttpClient<HttpClient>()
             .AddStandardResilienceHandler();
@@ -230,7 +240,10 @@ public class Program
                     .Get<OpenTelemetryConfig>() ?? throw new ApplicationException("Please provide an open telemetry tracing config!");
 
                 tracing
-                .SetResourceBuilder(ApplicationResource)
+                .SetResourceBuilder(ApplicationResource.AddAttributes(new Dictionary<string, object>()
+                {
+                    ["deployment.environment"] = env.EnvironmentName,
+                }))
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation(c => c.RecordException = true)
                 .AddEntityFrameworkCoreInstrumentation(opt =>
@@ -245,7 +258,7 @@ public class Program
                     {
                         otlp.Headers = config.JoinedHeaders;
                         otlp.Endpoint = new Uri(config.Endpoint!);
-                        otlp.Protocol = OtlpExportProtocol.Grpc;
+                        otlp.TimeoutMilliseconds = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
                     });
                 }
             })
@@ -257,7 +270,10 @@ public class Program
                     .Get<OpenTelemetryConfig>() ?? throw new ApplicationException("Please provide an open telemetry metrics config!");
 
                 metrics
-                .SetResourceBuilder(ApplicationResource)
+                .SetResourceBuilder(ApplicationResource.AddAttributes(new Dictionary<string, object>()
+                {
+                    ["deployment.environment"] = env.EnvironmentName,
+                }))
                 .AddMeter(ApplicationName)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
@@ -269,7 +285,7 @@ public class Program
                     {
                         otlp.Headers = config.JoinedHeaders;
                         otlp.Endpoint = new Uri(config.Endpoint!);
-                        otlp.Protocol = OtlpExportProtocol.Grpc;
+                        otlp.TimeoutMilliseconds = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
                     });
                 }
             });
@@ -283,11 +299,16 @@ public class Program
     {
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-        app.ConfiureAppSwagger();
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+            app.ConfigureAppSwagger();
 
         app.UseRouting();
 
         app.MapHealthCheckEndpoints();
+
+        app.MapGet("/", () => Results.Ok()) // this should return a 2XX code since some providers use it as a startup probe
+            .ExcludeFromDescription()
+            .ShortCircuit(StatusCodes.Status204NoContent);
 
         app.MapControllers();
     }

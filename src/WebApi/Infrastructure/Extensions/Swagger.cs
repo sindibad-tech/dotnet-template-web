@@ -32,7 +32,7 @@ public static class Swagger
         services.ConfigureOptions<SwaggerVersionedOptions>();
     }
 
-    public static void ConfiureAppSwagger(this WebApplication app)
+    public static void ConfigureAppSwagger(this WebApplication app)
     {
         app.UseSwagger();
 

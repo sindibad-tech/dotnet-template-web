@@ -9,7 +9,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DEV_APP_Port": "5227",
-        "DEV_APP_FeatureFlags__Disabled": "true"
+        "DEV_APP_FeatureFlags__Disabled": "true",
+        "APP_Port": "5227"
       }
     }
   }
