@@ -83,16 +83,17 @@ meaning you can use seilog's data enrichment capabilities alongside the logs bei
 configure serilog here
 
 ```c#
-private static void ConfigureSerilog(IConfiguration configuration, IHostEnvironment env, IServiceProvider sp, LoggerConfiguration serilog)
-{
-    serilog.WriteTo.Console(theme: AnsiConsoleTheme.Code);
-    serilog
-        .Enrich.FromLogContext()
-        .Enrich.WithExceptionDetails()
-        .Enrich.WithMachineName()
-        .Enrich.WithEnvironmentName()
-        .Enrich.WithEnvironmentUserName();
-}
+    private static void ConfigureSerilog(IConfiguration configuration, IHostEnvironment env, LoggerConfiguration serilog)
+    {
+        serilog
+            .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+            .ReadFrom.Configuration(configuration.GetSection("Logging"))
+            .Enrich.FromLogContext()
+            .Enrich.WithExceptionDetails()
+            .Enrich.WithMachineName()
+            .Enrich.WithEnvironmentName()
+            .Enrich.WithEnvironmentUserName();
+    }
 ```
 
 - ##### Metrics
@@ -171,9 +172,19 @@ You can also access the `IFeatureManager` Interface in the abstract `ApiControll
 
 > NOTE <br />
   You can disable feature management for your development without modifying the features.json file by setting the 
-  `DEV_APP_FeatureFlags__Disabled` or `APP_FeatureFlags__Disabled` variables to `true`
+  `DEV_APP_FeatureFlags__Disabled` (Development env only) or `APP_FeatureFlags__Disabled` variables to `true`
+  
+<hr />
 
-  <hr />
+### Api Versioning
+
+The Api supports versioning with the `/api/{apiVersion}/[controller]` scheme.
+to use versioning simply define your version in the `VersionConstants` file and decorate your controllers and endpoints with the `ApiVersionAttribute`
+You can also set the default Api version for the app from appsettings using the `VERSIONING` configuration section and setting the `DefaultVersion` key
+
+You can also pass the `IsDeprecated` flag in the attribute and the swagger generated docs will also reflect this change
+
+you can also use request headers and query params to set api version when not using the route using the `X-api-version` __header__ and the `api-version` __Query Param__
 
 
 
