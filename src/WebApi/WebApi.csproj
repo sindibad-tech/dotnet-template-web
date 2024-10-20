@@ -11,6 +11,7 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>$(AssemblyName).xml</DocumentationFile>
+		<ContainerUser>root</ContainerUser>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -58,18 +59,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Infrastructure\Swagger\SwaggerContent.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>SwaggerContent.resx</DependentUpon>
-	  </Compile>
+		<Compile Update="Infrastructure\Swagger\SwaggerContent.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SwaggerContent.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Infrastructure\Swagger\SwaggerContent.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>SwaggerContent.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Infrastructure\Swagger\SwaggerContent.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>SwaggerContent.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>

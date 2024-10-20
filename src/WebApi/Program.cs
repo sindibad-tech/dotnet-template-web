@@ -10,7 +10,6 @@ using OpenTelemetry.Resources;
 using Microsoft.AspNetCore.Hosting;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Trace;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using Serilog.Sinks.SystemConsole.Themes;
 using Serilog;
@@ -88,7 +87,17 @@ public class Program
             config.ReloadOnChange = true;
         });
 
+        var envFeaturesFileName = $"features.{env.EnvironmentName}.json";
+
+        configuration.AddJsonFile(config =>
+        {
+            config.Path = envFeaturesFileName;
+            config.Optional = true;
+            config.ReloadOnChange = true;
+        });
+
         configuration.AddEnvironmentVariables("APP_");
+
         if (env.IsDevelopment())
         {
             configuration.AddEnvironmentVariables("DEV_APP_");

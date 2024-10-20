@@ -4,6 +4,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 ENV TZ=Etc/Utc
+USER root
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 ARG BUILD_CONFIGURATION=Release

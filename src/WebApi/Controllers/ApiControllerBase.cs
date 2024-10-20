@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net.Mime;
 using Microsoft.FeatureManagement;
+using Microsoft.AspNetCore.Http;
 
 namespace Sindibad.SAD.WebTemplate.WebApi.Controllers;
 [ApiController]
@@ -16,4 +17,7 @@ public abstract class ApiControllerBase(ILogger<ApiControllerBase> logger, IFeat
     protected ILogger<ApiControllerBase> Logger { get; } = logger;
 
     protected IFeatureManager FeatureManager { get; } = featureManager;
+
+
+    protected ObjectResult InternalServerError<TResult>(TResult result) => StatusCode(StatusCodes.Status500InternalServerError, result);
 }
