@@ -19,7 +19,7 @@ namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware
             if (!context.Request.Path.Value.Contains("api"))
             {
                 await _next(context);
-                return; // Important: return here to skip the rest of the middleware
+                return;
             }
 
             if (!context.Request.Headers.ContainsKey("Authorization"))
@@ -35,7 +35,7 @@ namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware
             var username = credentials[0];
             var password = credentials[1];
 
-            // Validate the username and password (e.g., check against a database or a hardcoded list)
+            // Validate the username and password
             if (!IsAuthorizedUser(username, password))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -48,7 +48,6 @@ namespace Sindibad.SAD.WebTemplate.WebApi.Infrastructure.Middleware
 
         private bool IsAuthorizedUser(string username, string password)
         {
-            // Replace this with your user validation logic (e.g., database lookup, etc.)
             return username == "Sindiboss" && password == "FindingSevenThievesInBGW!";
         }
     }
