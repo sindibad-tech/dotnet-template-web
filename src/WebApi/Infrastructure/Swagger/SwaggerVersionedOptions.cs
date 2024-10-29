@@ -13,7 +13,6 @@ public class SwaggerVersionedOptions(IApiVersionDescriptionProvider apiVersionDe
     private readonly IHostEnvironment _env = env;
 
     public void Configure(string? name, SwaggerGenOptions options) => Configure(options);
-
     public void Configure(SwaggerGenOptions options)
     {
         foreach (var version in _versionProvider.ApiVersionDescriptions)
@@ -30,5 +29,30 @@ public class SwaggerVersionedOptions(IApiVersionDescriptionProvider apiVersionDe
                 Version = version.ApiVersion.ToString(),
             });
         }
+
+        // Add Basic Auth support
+        options.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "basic",
+            In = ParameterLocation.Header,
+            Description = "Basic Authentication. Enter your username and password."
+        });
+
+        // Apply the security requirement to all operations
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "basic"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
     }
 }
