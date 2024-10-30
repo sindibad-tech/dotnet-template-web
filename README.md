@@ -11,10 +11,11 @@ The template addes support for common enterprise scale concerns such as
 - Configuration
 - Feature Flags
 - Api Versioning
+- CORS
 - Api Documentation using _swagger_
 
 > Note:
-  Security Concerns such as _CORS_ or _AUTH_ have not been added to the base template
+  Security Concerns such as _AUTH_ have not been added to the base template yet
 
 ### Telemetry
 The template uses __OpenTelemetry__ Used mainly with the _OTLP_ protocol exporter configure in the 'appsettings.{environment}.json file and looks like this
@@ -187,5 +188,27 @@ You can also pass the `IsDeprecated` flag in the attribute and the swagger gener
 you can also use request headers and query params to set api version when not using the route using the `X-api-version` __header__ and the `api-version` __Query Param__
 
 
+<hr />
+
+### CORS
+
+The Api supports CORS throught the infra extention class called `Cors`
+The api includes 2 default cors policies called `allow-all` and `allow-configured` for allowing everything (essentially disabling CORS) and using custom rules defined in the `appsettings.json` file under the `Cors` Section
+
+You can also use _wildcards_ when defining rules for cors in appsettings. simply use `*` to specify all.
+
+> Tip:
+    You can use the `allow-all` policy by setting the `Enabled` flag to `false` in the configuration.
+
+```json
+  "Cors": {
+    "Enabled": false, // use this to disable
+    "AllowedOrigins": [ "*" ],
+    "AllowedMethods": [ "*" ],
+    "AllowedHeaders": [ "*" ]
+  },
+```
+
+ <hr />
 
 

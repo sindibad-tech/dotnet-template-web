@@ -194,6 +194,8 @@ public class Program
 
         services.AddControllers();
 
+        services.ConfigureCors(configuration, env);
+
         services.ConfigureFeatureFlags(configuration, env);
 
         services.ConfigureApiVersioning(configuration, env);
@@ -206,12 +208,6 @@ public class Program
         ConfigureApplicationServices(services, configuration, env);
         ConfigureOpenTelemetry(services, configuration, env);
         ConfigureHttpClient(services, configuration, env);
-        ConfigureDbContext(services, configuration, env);
-    }
-
-    private static void ConfigureDbContext(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
-    {
-        // Add DBCONTEXTEs here
     }
 
     private static void ConfigureApplicationServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
@@ -318,6 +314,8 @@ public class Program
         app.MapGet("/", () => Results.Ok()) // this should return a 2XX code since some providers use it as a startup probe
             .ExcludeFromDescription()
             .ShortCircuit(StatusCodes.Status204NoContent);
+
+        app.ConfigureAppCors();
 
         app.MapControllers();
     }
