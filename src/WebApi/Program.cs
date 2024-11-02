@@ -303,6 +303,7 @@ public class Program
     private static void ConfigureApp(WebApplication app)
     {
         app.UseMiddleware<ExceptionHandlingMiddleware>();
+        app.UseMiddleware<BasicAuthMiddleware>();
 
         if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
             app.ConfigureAppSwagger();
